@@ -23,6 +23,21 @@ $ pip install trigger-travis
 $ trigger-travis --help
 ```
 
+### Example of running a build and passing environment variables
+```yaml
+$ trigger-travis -t yourtoken -r yourorg/yourrepo --branch develop --env SOMEENV=value,ANOTHERENV=anothervalue --mergemode deep_merge --pro
+```
+
+### Example of running a build and overriding the commit message
+```yaml
+$ trigger-travis -t yourtoken -c 'This build was triggered by the API' --branch master
+```
+
+### Example of running a build and overriding the script
+```yaml
+$ trigger-travis -t yourtoken -s 'exit 0' -m replace --branch master
+```
+
 ## Related docs
 * [Travis Build Docs](https://docs.travis-ci.com/user/customizing-the-build)
 * [Triggering Builds APIv3](https://docs.travis-ci.com/user/triggering-builds/)
