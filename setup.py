@@ -9,7 +9,7 @@ from os import path
 here = path.abspath(path.dirname(__file__))
 
 setup(
-    name='notifybot',
+    name='trigger-travis',
     version='0.0.1',
     description='',
     long_description='A CLI to trigger Travis CI builds and inject env vars',
