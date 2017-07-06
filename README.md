@@ -1,5 +1,5 @@
 # trigger-travis
-![](https://cdn.travis-ci.com/images/logos/TravisCI-Mascot-1-20feeadb48fc2492ba741d89cb5a5c8a.png)
+![](https://cdn.travis-ci.com/images/logos/TravisCI-Full-Color-45e242791b7752b745a7ae53f265acd4.png)
 
 ## Overview
 * Install and execute this CLI to trigger Travis CI builds on a particular branch, optionally overriding env vars or the script section
