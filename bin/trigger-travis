@@ -16,20 +16,20 @@ Args:
     -r --reposlug      Travis repo slug to trigger e.g. owner_name/repo_name
     -p --pro           Whether to use pro (travis-ci.com) or free (travis-ci.org)
     -t --token         Travis API token
-    -v --verbose         Enable verbose mode
+    -v --verbose       Enable verbose mode
 """
 
 
 def parse_arguments():
     PARSER = argparse.ArgumentParser(description='Travis Build Trigger CLI')
     PARSER.add_argument('-b', '--branch', help="Branch to trigger", default='master')
-    PARSER.add_argument('-e', '--env', help="Slack API token", default=False)
-    PARSER.add_argument('-r', '--reposlug', help="Travis repo slug", required=True)
-    PARSER.add_argument('-m', '--mergemode', help="Merge mode", default='merge')
+    PARSER.add_argument('-e', '--env', help="Comma separated environment variables e.g --env THIS=that,THAT=this", default=False)
+    PARSER.add_argument('-r', '--reposlug', help="Travis repo slug e.g. owner_name/repo_name", required=True)
+    PARSER.add_argument('-m', '--mergemode', help="Merge mode - deep_merge, merge, replace (defaults to merge)", default='merge')
     PARSER.add_argument('-s', '--script', help="Script to run on the triggered build", default=False)
-    PARSER.add_argument('-c', '--commitmessage', help="Commit message to display", default=False)
+    PARSER.add_argument('-c', '--commitmessage', help="Commit message to display on the triggered build", default=False)
     PARSER.add_argument('-p', '--pro', help="Use --pro if you are using travis-ci.com. Defaults to travis-ci.org", action='store_true')
-    PARSER.add_argument('-t', '--token', help="Travis API token", required=True)
+    PARSER.add_argument('-t', '--token', help="Travis API token - get this using travis login --org (with --pro if you are using .com)", required=True)
     PARSER.add_argument('-v', '--verbose', help="Enable verbose output", action='store_true')
     return PARSER.parse_args()
 
