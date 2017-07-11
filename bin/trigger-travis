@@ -85,7 +85,18 @@ def run():
         commit_message = str(commit_message)
 
     if env:
-        env = str(env).split(',')
+        if ',' in env:
+            try:
+                env = str(env).split(',')
+            except:
+                print('Could not parse env vars, please use the format -e key1=value1,key2=value2')
+                sys.exit(1)
+        elif '=' in env:
+            pass
+        else:
+            print('Could not parse env vars, please use the format -e key1=value1,key2=value2')
+            sys.exit(1)
+
 
     request_body = {}
     request = {}
