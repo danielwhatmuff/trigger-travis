@@ -39,6 +39,7 @@ def parse_arguments():
 
 ARGS = parse_arguments()
 
+
 branch = ARGS.branch
 reposlug = ARGS.reposlug
 pro = ARGS.pro
@@ -78,6 +79,11 @@ def run():
 
     travis_api_url = 'https://api.travis-ci{}/repo/{}%2F{}/requests'.format(gtld, owner, repo)
 
+    request_body = {}
+    request = {}
+    request['message'] = commit_message
+    request['branch'] = branch
+
     if env:
         if ',' in env:
             try:
@@ -86,16 +92,10 @@ def run():
                 print('Could not parse env vars, please use the format -e key1=value1,key2=value2')
                 sys.exit(1)
         elif '=' in env:
-            pass
+            env = str(env)
         else:
             print('Could not parse env vars, please use the format -e key1=value1,key2=value2')
             sys.exit(1)
-
-
-    request_body = {}
-    request = {}
-    request['message'] = commit_message
-    request['branch'] = branch
 
     if env:
         request['config'] = {}
