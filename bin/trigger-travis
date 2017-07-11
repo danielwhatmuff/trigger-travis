@@ -16,9 +16,11 @@ Args:
     -r --reposlug      Travis repo slug to trigger e.g. owner_name/repo_name
     -p --pro           Whether to use pro (travis-ci.com) or free (travis-ci.org)
     -t --token         Travis API token
-    -v --verbose       Enable verbose mode
+    -d --debug         Enable debug output
+    -v --version       Print the installed version of trigger-travis
 """
 
+version_number='0.0.3'
 
 def parse_arguments():
     PARSER = argparse.ArgumentParser(description='Travis Build Trigger CLI')
@@ -30,7 +32,8 @@ def parse_arguments():
     PARSER.add_argument('-c', '--commitmessage', help="Commit message to display on the triggered build", default=False)
     PARSER.add_argument('-p', '--pro', help="Use --pro if you are using travis-ci.com. Defaults to travis-ci.org", action='store_true')
     PARSER.add_argument('-t', '--token', help="Travis API token - get this using travis login --org (with --pro if you are using .com)", required=True)
-    PARSER.add_argument('-v', '--verbose', help="Enable verbose output", action='store_true')
+    PARSER.add_argument('-d', '--debug', help="Enable debug output", action='store_true')
+    PARSER.add_argument('-v', '--version', help="Show the installed version of trigger-travis", default=False)
     return PARSER.parse_args()
 
 
@@ -45,10 +48,14 @@ token = ARGS.token
 merge_mode = ARGS.mergemode
 script = ARGS.script
 commit_message = ARGS.commitmessage
-verbose = ARGS.verbose
+debug = ARGS.debug
+version = ARGS.version
 
 
 def run():
+
+    if version:
+        print version_number
     if pro:
         gtld = '.com'
     else:
@@ -91,7 +98,7 @@ def run():
 
     headers = { "Content-Type": "application/json", "Accept": "application/json", "Travis-API-Version": "3", "Authorization": "token {}".format(token)}
 
-    if verbose:
+    if debug:
         print('Sending HTTP Headers {}'.format(headers))
         print('Sending request body {}'.format(str(request_body)))
 
