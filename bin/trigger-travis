@@ -29,13 +29,26 @@ def parse_arguments():
     PARSER.add_argument('-r', '--reposlug', help="Travis repo slug e.g. owner_name/repo_name", default=False)
     PARSER.add_argument('-m', '--mergemode', help="Merge mode - deep_merge, merge, replace (defaults to merge)", default='merge')
     PARSER.add_argument('-s', '--script', help="Script to run on the triggered build", default=False)
-    PARSER.add_argument('-c', '--commitmessage', help="Commit message to display on the triggered build", default=False)
+    PARSER.add_argument('-c', '--commitmessage', help="Commit message to display on the triggered build", default='This build was triggered using the trigger-travis CLI')
     PARSER.add_argument('-p', '--pro', help="Use --pro if you are using travis-ci.com. Defaults to travis-ci.org", action='store_true')
     PARSER.add_argument('-t', '--token', help="Travis API token - get this using travis login --org (with --pro if you are using .com)", default=False)
     PARSER.add_argument('-d', '--debug', help="Enable debug output", action='store_true')
     PARSER.add_argument('-v', '--version', help="Show the installed version of trigger-travis", action='store_true')
     return PARSER.parse_args()
 
+
+ARGS = parse_arguments()
+
+branch = ARGS.branch
+reposlug = ARGS.reposlug
+pro = ARGS.pro
+env = ARGS.env
+token = ARGS.token
+merge_mode = ARGS.mergemode
+script = ARGS.script
+commit_message = ARGS.commitmessage
+debug = ARGS.debug
+version = ARGS.version
 
 
 def run():
@@ -64,11 +77,6 @@ def run():
         sys.exit(1)
 
     travis_api_url = 'https://api.travis-ci{}/repo/{}%2F{}/requests'.format(gtld, owner, repo)
-
-    if not commit_message:
-        commit_message = 'This build was triggered using the trigger-travis CLI'
-    else commit_message:
-        commit_message = str(commit_message)
 
     if env:
         if ',' in env:
@@ -118,18 +126,5 @@ def run():
     else:
         print('Trigger failed, response code {}'.format(response.status_code))
         sys.exit(1)
-
-ARGS = parse_arguments()
-
-branch = ARGS.branch
-reposlug = ARGS.reposlug
-pro = ARGS.pro
-env = ARGS.env
-token = ARGS.token
-merge_mode = ARGS.mergemode
-script = ARGS.script
-commit_message = ARGS.commitmessage
-debug = ARGS.debug
-version = ARGS.version
 
 run()
