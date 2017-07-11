@@ -37,20 +37,6 @@ def parse_arguments():
     return PARSER.parse_args()
 
 
-ARGS = parse_arguments()
-
-
-branch = ARGS.branch
-reposlug = ARGS.reposlug
-pro = ARGS.pro
-env = ARGS.env
-token = ARGS.token
-merge_mode = ARGS.mergemode
-script = ARGS.script
-commit_message = ARGS.commitmessage
-debug = ARGS.debug
-version = ARGS.version
-
 
 def run():
     if version:
@@ -81,7 +67,7 @@ def run():
 
     if not commit_message:
         commit_message = 'This build was triggered using the trigger-travis CLI'
-    else:
+    else commit_message:
         commit_message = str(commit_message)
 
     if env:
@@ -132,5 +118,18 @@ def run():
     else:
         print('Trigger failed, response code {}'.format(response.status_code))
         sys.exit(1)
+
+ARGS = parse_arguments()
+
+branch = ARGS.branch
+reposlug = ARGS.reposlug
+pro = ARGS.pro
+env = ARGS.env
+token = ARGS.token
+merge_mode = ARGS.mergemode
+script = ARGS.script
+commit_message = ARGS.commitmessage
+debug = ARGS.debug
+version = ARGS.version
 
 run()
