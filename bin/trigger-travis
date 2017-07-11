@@ -37,12 +37,8 @@ def parse_arguments():
     return PARSER.parse_args()
 
 
-
-
-
 def run():
     ARGS = parse_arguments()
-
     branch = ARGS.branch
     reposlug = ARGS.reposlug
     pro = ARGS.pro
