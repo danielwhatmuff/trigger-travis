@@ -37,22 +37,23 @@ def parse_arguments():
     return PARSER.parse_args()
 
 
-ARGS = parse_arguments()
 
-
-branch = ARGS.branch
-reposlug = ARGS.reposlug
-pro = ARGS.pro
-env = ARGS.env
-token = ARGS.token
-merge_mode = ARGS.mergemode
-script = ARGS.script
-commit_message = ARGS.commitmessage
-debug = ARGS.debug
-version = ARGS.version
 
 
 def run():
+    ARGS = parse_arguments()
+
+    branch = ARGS.branch
+    reposlug = ARGS.reposlug
+    pro = ARGS.pro
+    env = ARGS.env
+    token = ARGS.token
+    merge_mode = ARGS.mergemode
+    script = ARGS.script
+    commit_message = ARGS.commitmessage
+    debug = ARGS.debug
+    version = ARGS.version
+
     if version:
         print('trigger-travis version: v{}'.format(version_number))
         sys.exit(0)
