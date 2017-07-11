@@ -5,7 +5,7 @@ import argparse
 import os
 import sys
 """
-Trigger Travis CI build.
+Trigger a Travis CI build.
 
 Args:
     -b --branch        Git branch to build (defaults to master)
@@ -33,7 +33,9 @@ def parse_arguments():
     PARSER.add_argument('-v', '--verbose', help="Enable verbose output", action='store_true')
     return PARSER.parse_args()
 
+
 ARGS = parse_arguments()
+
 
 branch = ARGS.branch
 reposlug = ARGS.reposlug
@@ -45,57 +47,63 @@ script = ARGS.script
 commit_message = ARGS.commitmessage
 verbose = ARGS.verbose
 
-if pro:
-    gtld = '.com'
-else:
-    gtld = '.org'
 
-owner = reposlug.split('/')[0]
-repo = reposlug.split('/')[1]
+def run():
+    if pro:
+        gtld = '.com'
+    else:
+        gtld = '.org'
 
-travis_api_url = 'https://api.travis-ci{}/repo/{}%2F{}/requests'.format(gtld, owner, repo)
+    try:
+        owner = reposlug.split('/')[0]
+        repo = reposlug.split('/')[1]
+    except:
+        print('Could not parse the Travis repo slug, please check that https://travis-ci{}/{} is valid'.format(gtld, reposlug))
+        sys.exit(1)
 
-if not commit_message:
-    commit_message = 'This build was triggered using the trigger-travis CLI'
-else:
-    commit_message = str(commit_message)
+    travis_api_url = 'https://api.travis-ci{}/repo/{}%2F{}/requests'.format(gtld, owner, repo)
 
-if env:
-    env = str(env).split(',')
+    if not commit_message:
+        commit_message = 'This build was triggered using the trigger-travis CLI'
+    else:
+        commit_message = str(commit_message)
 
-request_body = {}
-request = {}
-request['message'] = commit_message
-request['branch'] = branch
+    if env:
+        env = str(env).split(',')
 
-if env:
-    request['config'] = {}
-    request['config']['merge_mode'] = merge_mode
-    request['config']['env'] = {}
-    request['config']['env']['global'] = env
+    request_body = {}
+    request = {}
+    request['message'] = commit_message
+    request['branch'] = branch
 
-if script:
-    request['config']['env']['script'] = str(script)
+    if env:
+        request['config'] = {}
+        request['config']['merge_mode'] = merge_mode
+        request['config']['env'] = {}
+        request['config']['env']['global'] = env
 
-request_body['request'] = request
+    if script:
+        request['config']['env']['script'] = str(script)
 
-request_body = json.dumps(request_body)
+    request_body['request'] = request
 
-print(request_body)
+    request_body = json.dumps(request_body)
 
-headers = { "Content-Type": "application/json", "Accept": "application/json", "Travis-API-Version": "3", "Authorization": "token {}".format(token)}
+    headers = { "Content-Type": "application/json", "Accept": "application/json", "Travis-API-Version": "3", "Authorization": "token {}".format(token)}
 
-if verbose:
-    print('Sending HTTP Headers {}'.format(headers))
-    print('Sending request body {}'.format(str(request_body)))
+    if verbose:
+        print('Sending HTTP Headers {}'.format(headers))
+        print('Sending request body {}'.format(str(request_body)))
 
-print('Calling Travis API V3 to trigger build for {}'.format(reposlug))
+    print('Calling Travis API V3 to trigger build for {}'.format(reposlug))
 
-response = requests.post(travis_api_url, headers=headers, data=request_body)
+    response = requests.post(travis_api_url, headers=headers, data=request_body)
 
-if response.status_code == 202:
-    print('Trigger successful')
-    sys.exit(0)
-else:
-    print('Trigger failed, response code {}'.format(response.status_code))
-    sys.exit(1)
+    if response.status_code == 202:
+        print('Trigger successful')
+        sys.exit(0)
+    else:
+        print('Trigger failed, response code {}'.format(response.status_code))
+        sys.exit(1)
+
+run()
