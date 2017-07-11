@@ -26,12 +26,12 @@ def parse_arguments():
     PARSER = argparse.ArgumentParser(description='Travis Build Trigger CLI')
     PARSER.add_argument('-b', '--branch', help="Branch to trigger", default='master')
     PARSER.add_argument('-e', '--env', help="Comma separated environment variables e.g --env THIS=that,THAT=this", default=False)
-    PARSER.add_argument('-r', '--reposlug', help="Travis repo slug e.g. owner_name/repo_name", required=True)
+    PARSER.add_argument('-r', '--reposlug', help="Travis repo slug e.g. owner_name/repo_name", default=False)
     PARSER.add_argument('-m', '--mergemode', help="Merge mode - deep_merge, merge, replace (defaults to merge)", default='merge')
     PARSER.add_argument('-s', '--script', help="Script to run on the triggered build", default=False)
     PARSER.add_argument('-c', '--commitmessage', help="Commit message to display on the triggered build", default=False)
     PARSER.add_argument('-p', '--pro', help="Use --pro if you are using travis-ci.com. Defaults to travis-ci.org", action='store_true')
-    PARSER.add_argument('-t', '--token', help="Travis API token - get this using travis login --org (with --pro if you are using .com)", required=True)
+    PARSER.add_argument('-t', '--token', help="Travis API token - get this using travis login --org (with --pro if you are using .com)", default=False)
     PARSER.add_argument('-d', '--debug', help="Enable debug output", action='store_true')
     PARSER.add_argument('-v', '--version', help="Show the installed version of trigger-travis", action='store_true')
     return PARSER.parse_args()
@@ -53,10 +53,17 @@ version = ARGS.version
 
 
 def run():
-
     if version:
         print('trigger-travis version: v{}'.format(version_number))
         sys.exit(0)
+
+    if not token:
+        print('Travis API token argument is required')
+        sys.exit(1)
+
+    if not reposlug:
+        print('Repo slug argument is required')
+        sys.exit(1)
 
     if pro:
         gtld = '.com'
