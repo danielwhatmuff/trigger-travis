@@ -41,3 +41,6 @@ $ trigger-travis -t yourtoken -s 'exit 0' -m replace --branch master
 ## Related docs
 * [Travis Build Docs](https://docs.travis-ci.com/user/customizing-the-build)
 * [Triggering Builds APIv3](https://docs.travis-ci.com/user/triggering-builds/)
+
+## Known issues
+* Encrypted environment variables dont work with the deep_merge option - you must define in the repo settings using the Travis UI, this is a limitation with Travis.
